@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="60" viewBox="0 0 176 60" role="img" aria-label="UpTask">
+  <!-- Logo temporal de UpTask: reemplazar por el oficial del curso -->
+  <defs>
+    <linearGradient id="u-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed" />
+      <stop offset="1" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+  <path d="M14 29 V35 A10 10 0 0 0 34 35 V29" fill="none" stroke="url(#u-gradient)" stroke-width="9" stroke-linecap="round" />
+  <path d="M14 8 L20 17 H8 Z" fill="#ec4899" stroke="#ec4899" stroke-width="2" stroke-linejoin="round" />
+  <text x="42" y="48" fill="#ffffff" font-family="'Arial Rounded MT Bold', Nunito, Poppins, 'Segoe UI', Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="-1">ptask</text>
+</svg>
