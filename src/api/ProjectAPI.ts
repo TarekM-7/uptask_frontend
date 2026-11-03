@@ -1,5 +1,7 @@
+import api from "@/lib/axios";
 import type { ProjectFormData } from "@/types";
 
-export async function createProject(data: ProjectFormData) {
+export async function createProject(formData: ProjectFormData) {
+    const {data} = await api.post('/projects', formData)
     console.log(data)
 }
