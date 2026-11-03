@@ -58,8 +58,9 @@ export default function CreateProjectView() {
 
                 <input 
                     type="submit" 
-                    value="Crear Proyecto"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors"
+                    value={mutation.isPending ? "Creando..." : "Crear Proyecto"}
+                    disabled={mutation.isPending}
+                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 />
             </form>
         </div>
