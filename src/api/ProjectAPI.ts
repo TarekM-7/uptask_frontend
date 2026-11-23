@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { dashboardProjectSchema, type ProjectFormData } from "@/types";
+import { dashboardProjectSchema, type Project, type ProjectFormData } from "@/types";
 import { isAxiosError } from "axios";
 
 type ApiErrorResponse = {
@@ -25,6 +25,18 @@ export async function getProjects() {
         if (response.success) {
             return response.data
         }
+    } catch (error) {
+        if (isAxiosError<ApiErrorResponse>(error) && error.response) {
+            throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
+        }
+        throw new Error('No se pudo conectar con el servidor')
+    }
+}
+
+export async function getProjectsById(id: Project['_id']) {
+    try {
+        const {data} = await api(`/projects/${id}`)
+        return data
     } catch (error) {
         if (isAxiosError<ApiErrorResponse>(error) && error.response) {
             throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
