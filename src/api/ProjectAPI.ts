@@ -44,3 +44,20 @@ export async function getProjectsById(id: Project['_id']) {
         throw new Error('No se pudo conectar con el servidor')
     }
 }
+
+type ProjectAPIType = {
+    formData: ProjectFormData
+    projectId: Project['_id']
+}
+
+export async function updateProject({formData, projectId}: ProjectAPIType) {
+    try {
+        const {data} = await api.put(`/projects/${projectId}`, formData)
+        return data.data
+    } catch (error) {
+        if (isAxiosError<ApiErrorResponse>(error) && error.response) {
+            throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
+        }
+        throw new Error('No se pudo conectar con el servidor')
+    }
+}

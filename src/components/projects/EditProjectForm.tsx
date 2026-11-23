@@ -1,21 +1,42 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import ProjectForm from "./ProjectForm";
-import type { ProjectFormData } from "@/types";
+import type { Project, ProjectFormData } from "@/types";
 import { useForm } from "react-hook-form";
+import { useMutation } from '@tanstack/react-query'
+import { updateProject } from "@/api/ProjectAPI";
+import { toast } from "react-toastify";
 
 type EditProjectFormProps = {
     data: ProjectFormData
+    projectId: Project['_id']
 }
 
-export default function EditProjectForm({data}: EditProjectFormProps) {
+export default function EditProjectForm({data, projectId}: EditProjectFormProps) {
+
+    const navigate = useNavigate()
     const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: {
         projectName: data.projectName,
         clientName: data.clientName,
         description: data.description
     }})
 
+    const { mutate } = useMutation({
+        mutationFn: updateProject,
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: () => {
+            toast.success('Proyecto actualizado correctamente.')
+            navigate('/')
+        }
+    })
+
     const handleForm = (formData: ProjectFormData) => {
-        console.log(formData)
+        const data ={
+            formData,
+            projectId
+        }
+        mutate(data)
     }
 
   return (
