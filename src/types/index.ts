@@ -1,5 +1,10 @@
 import { z } from 'zod'
 
+// API
+export type ApiErrorResponse = {
+    errors: { msg: string; path?: string }[]
+}
+
 // Tasks
 export const taskStatusSchema = z.enum(["pending" , "onHold" , "inProgress" , "underReview" , "completed"])
 export const taskSchema = z.object({
