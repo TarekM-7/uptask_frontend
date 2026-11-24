@@ -1,6 +1,9 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form'
+import TaskForm from './TaskForm';
+import type { TaskFormData } from '@/types';
 
 export default function AddTaskModal() {
     const navigate = useNavigate()
@@ -9,6 +12,16 @@ export default function AddTaskModal() {
     const queryParams = new URLSearchParams(location.search)
     const modalTask = queryParams.get('newTask')
     const show = modalTask ? true : false
+
+    const intialValues: TaskFormData = {
+        taskName: '',
+        description: ''
+    }
+    const { register, handleSubmit, formState: {errors} } = useForm({defaultValues: intialValues})
+
+    const handleCreateTask = (formData: TaskFormData) => {
+        console.log(formData)
+    }
 
     return (
         <>
@@ -48,6 +61,19 @@ export default function AddTaskModal() {
                                     <p className="text-xl font-bold">Llena el formulario y crea  {''}
                                         <span className="text-fuchsia-600">una tarea</span>
                                     </p>
+
+                                    <form 
+                                        noValidate
+                                        onSubmit={handleSubmit(handleCreateTask)}
+                                        className='mt-10 space-y-3'
+                                    >
+                                        <TaskForm register={register} errors={errors}/>
+                                        <input 
+                                            type="submit" 
+                                            value='Guardar Tarea'
+                                            className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                    </form>
 
                                 </Dialog.Panel>
                             </Transition.Child>
