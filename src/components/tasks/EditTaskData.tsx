@@ -1,11 +1,21 @@
-import { useLocation } from "react-router"
+import { useLocation, useParams } from "react-router"
+import { useQuery } from '@tanstack/react-query'
+import { getTaskById } from "@/api/TaskAPI"
 
 export default function EditTaskData() {
+    const params = useParams()
+    const projectId = params.projectId!
+
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
-    const editTask = queryParams.get('editTask')
-    console.log(editTask)
+    const taskId = queryParams.get('editTask')!
 
+    const {data} = useQuery({
+        queryKey: ['task', taskId],
+        queryFn: () => getTaskById({projectId, taskId}),
+        enabled: !!taskId
+    })
+    console.log(data)
 
   return (
     <div>EditTaskData</div>
