@@ -27,7 +27,7 @@ export default function ProjectDetailsView() {
                 <button
                     type="button"
                     className="bg-purple-400 hover:bg-purple-500 px-10 py-3 font-bold text-xl text-white cursor-pointer transition-colors"
-                    onClick={() => navigate('?newTask=true')}
+                    onClick={() => navigate(location.pathname + '?newTask=true')}
                 >Agregar tarea</button>
             </nav>
 
