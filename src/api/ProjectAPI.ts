@@ -61,3 +61,14 @@ export async function updateProject({formData, projectId}: ProjectAPIType) {
         throw new Error('No se pudo conectar con el servidor')
     }
 }
+
+export async function deleteProject(id: Project['_id']) {
+    try {
+        await api.delete(`/projects/${id}`)
+    } catch (error) {
+        if (isAxiosError<ApiErrorResponse>(error) && error.response) {
+            throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
+        }
+        throw new Error('No se pudo conectar con el servidor')
+    }
+}
