@@ -1,9 +1,25 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router';
+import type { Task, TaskFormData } from '@/types';
+import { useForm } from 'react-hook-form';
+import TaskForm from './TaskForm';
 
-export default function EditTaskModal() {
+type EditTaskModalProps = {
+    data: Task
+}
+
+export default function EditTaskModal({data}: EditTaskModalProps) {
     const navigate = useNavigate()
+
+    const { register, handleSubmit, reset, formState: {errors} } = useForm<TaskFormData>({defaultValues: {
+        taskName: data.taskName,
+        description: data.description
+    }})
+    
+    const handleEditTask = (formData: TaskFormData) => {
+        console.log(formData)
+    }
 
     return (
         <Transition appear show={true} as={Fragment}>
@@ -45,10 +61,11 @@ export default function EditTaskModal() {
 
                                 <form
                                     className="mt-10 space-y-3"
+                                    onSubmit={handleSubmit(handleEditTask)}
                                     noValidate
                                 >
                     
-
+                                    <TaskForm errors={errors} register={register} />
                     
                                     <input
                                         type="submit"
