@@ -33,3 +33,16 @@ export async function getTaskById({projectId, taskId}: Pick<TaskAPI, 'projectId'
         throw new Error('No se pudo conectar con el servidor')
     }
 }
+
+export async function updateTask({projectId, taskId, formData}: Pick<TaskAPI, 'projectId'|'taskId'|'formData'>) {
+    try {
+        const url = `/projects/${projectId}/tasks/${taskId}`
+        const { data } = await api.put(url, formData)
+        return data.data
+    } catch (error) {
+        if (isAxiosError<ApiErrorResponse>(error) && error.response) {
+            throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
+        }
+        throw new Error('No se pudo conectar con el servidor')
+    }
+}
