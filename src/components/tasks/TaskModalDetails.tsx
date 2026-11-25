@@ -1,11 +1,12 @@
 import { Fragment, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
-import { getTaskById } from '@/api/TaskAPI';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getTaskById, updateStatus } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/utils';
 import { statusTranslations } from '@/locales/es';
+import type { TaskStatus } from '@/types';
 
 
 export default function TaskModalDetails() {
@@ -28,6 +29,26 @@ export default function TaskModalDetails() {
     useEffect(() => {
         if (isError) toast.error(error.message, {toastId: 'error'})
     }, [isError, error])
+
+    const queryClient = useQueryClient()
+
+    const {mutate} = useMutation({
+        mutationFn: updateStatus,
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: () => {
+            toast.success('Se actualizó el status correctamente.')
+            queryClient.invalidateQueries({queryKey: ['project', projectId]})
+            queryClient.invalidateQueries({queryKey: ['task', taskId]})
+        }
+    })
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const status = e.target.value as TaskStatus
+        const data = {projectId, taskId, status}
+        mutate(data)
+    }
 
     if (isError) return <Navigate to={`/projects/${projectId}`}/>
 
@@ -74,6 +95,7 @@ export default function TaskModalDetails() {
                                             id=""
                                             className='w-full p-3 bg-white border border-gray-300 rounded'
                                             defaultValue={data.status}
+                                            onChange={handleChange}
                                         >
                                             {Object.entries(statusTranslations).map(([key, value]) => (
                                                 <option key={key} value={key}>{value}</option>

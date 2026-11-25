@@ -6,6 +6,7 @@ type TaskAPI = {
     formData: TaskFormData
     projectId: Project['_id']
     taskId: Task['_id']
+    status: Task['status']
 }
 
 export async function createTask({formData, projectId}: Pick<TaskAPI, 'formData' | 'projectId'>) {
@@ -54,6 +55,18 @@ export async function deleteTask({projectId, taskId}: Pick<TaskAPI, 'projectId' 
     try {
         const url = `/projects/${projectId}/tasks/${taskId}`
         await api.delete(url)
+    } catch (error) {
+        if (isAxiosError<ApiErrorResponse>(error) && error.response) {
+            throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
+        }
+        throw new Error('No se pudo conectar con el servidor')
+    }
+}
+
+export async function updateStatus({projectId, taskId, status}: Pick<TaskAPI, 'projectId' | 'taskId' | 'status'>) {
+    try {
+        const url = `/projects/${projectId}/tasks/${taskId}/status`
+        await api.post(url, {status})
     } catch (error) {
         if (isAxiosError<ApiErrorResponse>(error) && error.response) {
             throw new Error(error.response.data?.errors?.[0]?.msg ?? 'Hubo un error')
