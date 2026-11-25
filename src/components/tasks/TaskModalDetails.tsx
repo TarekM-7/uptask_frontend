@@ -9,29 +9,27 @@ import { toast } from 'react-toastify';
 export default function TaskModalDetails() {
     const navigate = useNavigate()
 
-        const params = useParams()
-        const projectId = params.projectId!
-        const location = useLocation()
-        const queryParams = new URLSearchParams(location.search)
-        const taskId = queryParams.get('viewTask')!
+    const params = useParams()
+    const projectId = params.projectId!
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const taskId = queryParams.get('viewTask')!
 
-        const show = taskId? true : false
-        const {data, isError, error} = useQuery({
-            queryKey: ['task', taskId],
-            queryFn: () => getTaskById({projectId, taskId}),
-            enabled: !!taskId,
-            retry: false
-        })
-  
-        useEffect(() => {
-            if (isError) toast.error(error.message, {toastId: 'error'})
-        }, [isError, error])
+    const show = taskId? true : false
+    const {data, isError, error} = useQuery({
+        queryKey: ['task', taskId],
+        queryFn: () => getTaskById({projectId, taskId}),
+        enabled: !!taskId,
+        retry: false
+    })
 
-        console.log(data)
+    useEffect(() => {
+        if (isError) toast.error(error.message, {toastId: 'error'})
+    }, [isError, error])
 
-        if (isError) return <Navigate to={`/projects/${projectId}`}/>
+    if (isError) return <Navigate to={`/projects/${projectId}`}/>
 
-    return (
+    if (data) return (
         <>
             <Transition appear show={show} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => navigate(location.pathname, {replace: true})}>
@@ -64,9 +62,9 @@ export default function TaskModalDetails() {
                                     <Dialog.Title
                                         as="h3"
                                         className="font-black text-4xl text-slate-600 my-5"
-                                    >Titulo aquí
+                                    >{data.taskName}
                                     </Dialog.Title>
-                                    <p className='text-lg text-slate-500 mb-2'>Descripción:</p>
+                                    <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
                                     </div>
