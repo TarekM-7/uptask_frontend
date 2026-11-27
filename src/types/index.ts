@@ -1,5 +1,17 @@
 import { z } from 'zod'
 
+//Auth & Users
+const authSchema = z.object({
+    name: z.string(),
+    email: z.email(),
+    password: z.string(),
+    password_confirmation: z.string()
+})
+
+type Auth = z.infer<typeof authSchema>
+export type UserLoginForm = Pick<Auth, 'email' | 'password'>
+export type UserRegistrationForm = Pick<Auth, 'name' | 'email' | 'password' | 'password_confirmation'>
+
 // API
 export type ApiErrorResponse = {
     errors: { msg: string; path?: string }[]
